@@ -16,28 +16,32 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UIImagePicke
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageView = UIImageView(image: UIImage(named: "firstPhoto"))
-        setViewAndButton()
+
         setScrollView()
-        
+        setViewAndButton()
         
     }
     
     func setScrollView() {
-        
-        //設定滾動區域及大小
-        scrollView = UIScrollView(frame: view.bounds)
+
+        // Set Up Scroll View
+        scrollView = UIScrollView(frame: CGRect(x:0, y:0, width: view.bounds.size.width, height: (view.bounds.size.height - 44)))
+        imageView = UIImageView(frame: CGRect(x:0, y:0, width: 2000, height: 2000))
+        imageView.image = UIImage(named: "icon_Photo")
         scrollView.contentSize = imageView.bounds.size
-        
         view.addSubview(scrollView)
-        scrollView.addSubview(imageView)
         
+        // Set Up Placeholder Image View
+        imageView = UIImageView(frame: CGRect(x:0, y:0, width: 2000, height: 2000))
+        imageView.image = UIImage(named: "icon_Photo")
+        scrollView.addSubview(imageView)
+
         //當裝置旋轉時，會重新調整大小
         scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
+
         //1.將滾動區域的位置從原點在左上角改為(1000, 450)
         scrollView.contentOffset = CGPoint(x: 1000, y: 450)
-        
+
         //2. 縮放功能需要指定delegate self 跟縮放比例
         scrollView.delegate = self
         //        scrollView.minimumZoomScale = 0.1
@@ -76,11 +80,12 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UIImagePicke
     
     @objc func buttonAction() {
         
-        let controller = UIImagePickerController()
-        controller.delegate = self
-        controller.sourceType = .photoLibrary
-        present(controller, animated: true, completion: nil)
-    
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            let controller = UIImagePickerController()
+            controller.delegate = self
+            controller.sourceType = .photoLibrary
+            self.present(controller, animated: true, completion: nil)
+        }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
@@ -88,7 +93,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UIImagePicke
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]){
-        
        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
         else { return }
     
