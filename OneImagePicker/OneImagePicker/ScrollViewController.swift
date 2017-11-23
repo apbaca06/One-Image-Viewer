@@ -42,14 +42,13 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UIImagePicke
         //當裝置旋轉時，會重新調整大小
         scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
-        //1.將滾動區域的位置從原點在左上角改為(1000, 450)
-        scrollView.contentOffset = CGPoint(x: 1000, y: 450)
+        //1.將滾動區域的位置從原點
+        scrollView.contentOffset = CGPoint(x: 0, y: 0)
 
         //2. 縮放功能需要指定delegate self 跟縮放比例
         scrollView.delegate = self
-        //        scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 2.0
-        //        scrollView.zoomScale = 1.0
+        scrollView.zoomScale = 1.0
     }
     
     
@@ -119,7 +118,6 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UIImagePicke
         
         let minScale = min(widthScale, heightScale)
         scrollView.minimumZoomScale = minScale
-        
         scrollView.zoomScale = minScale
         
     }
