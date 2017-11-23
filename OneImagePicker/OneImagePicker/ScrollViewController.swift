@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Photos
 
 class ScrollViewController: UIViewController, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
@@ -22,19 +22,22 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UIImagePicke
         
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     func setScrollView() {
 
         // Set Up Scroll View
         scrollView = UIScrollView(frame: CGRect(x:0, y:0, width: view.bounds.size.width, height: (view.bounds.size.height - 44)))
         imageView = UIImageView(frame: CGRect(x:0, y:0, width: 2000, height: 2000))
-        imageView.image = UIImage(named: "icon_Photo")
+        imageView.image = UIImage(named: "icon_photo")?.withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = UIColor.white
+        imageView.contentMode = .scaleAspectFit
         scrollView.contentSize = imageView.bounds.size
         view.addSubview(scrollView)
-        
-        // Set Up Placeholder Image View
-        imageView = UIImageView(frame: CGRect(x:0, y:0, width: 2000, height: 2000))
-        imageView.image = UIImage(named: "icon_Photo")
         scrollView.addSubview(imageView)
+        
 
         //當裝置旋轉時，會重新調整大小
         scrollView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -67,9 +70,12 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UIImagePicke
         // Set Up Button
         let button = UIButton(frame: CGRect(x: (yellowView.bounds.size.width/2 - 90), y: (yellowView.bounds.size.height/2 - 22), width: 180, height: 44))
         button.backgroundColor = UIColor(red: 43/255, green: 43/255, blue: 43/255, alpha: 1)
-        button.setTitle("Pick and Image", for: .normal)
-        button.titleLabel?.font = UIFont (name: "SFUIText-Heavy", size: 20)
+        button.setTitle("Pick an Image", for: .normal)
+        button.titleLabel?.font = UIFont (name: "SFUIText", size: 20)
+
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         button.layer.masksToBounds = false
+        button.layer.cornerRadius = 2.0
         button.layer.shadowColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.25).cgColor
         button.layer.shadowOpacity = 1
         button.layer.shadowOffset = CGSize(width: 0, height: 2)
@@ -121,9 +127,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate, UIImagePicke
     //3. 呼叫
     override func viewWillLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
         updateMinZoomScaleForSize(view.bounds.size)
-        
     }
     
     //4.讓圖片置中, 每次縮放之後會被呼叫
